@@ -3,29 +3,24 @@
   "version": "1.0.0",
   "description": "JWT token based authentication for Node.js GraphQL Apollo Server 2.0",
   "main": "index.js",
-  "author": "Tharun Bathula",
+  "author": "Ali Raza",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": ""
   },
-  "keywords": [
-    "jwt",
-    "apollo server",
-    "mongodb",
-    "graphql",
-    "jsonwebtoken",
-    "bcryptjs",
-    "async await"
-  ],
   "dependencies": {
     "apollo-server": "^2.9.3",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
     "graphql": "^14.5.4",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.3.2"
+    "mongodb": "^3.3.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2"
   },
   "scripts": {
-    "start": "nodemon src"
+    "start": "nodemon index.js"
   }
 }

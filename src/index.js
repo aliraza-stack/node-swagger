@@ -4,6 +4,23 @@ const { resolvers } = require("./resolvers");
 const { getPayload } = require('./util');
 const db = require('./mongodb');
 const config = require('./config');
+const routes = require('./routes/user');
+const express = require('express')
+const app = express()
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../docs/swagger.json');
+
+const port = 3000
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+app.use('/api/v1', routes);
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 
 const server = new ApolloServer({
   typeDefs,
@@ -24,9 +41,8 @@ db.connect(config.database, (err) => {
   if (err) {
     console.error(err)
   } else {
-    server.listen().then(({ url }) => {
+    server.listen(4000).then(({ url }) => {
       console.log(`🚀  Server ready at ${url}`);
     });
-    console.log('🚀  Database Connected Successfully');
   }
 });
