@@ -17,7 +17,6 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-// get user by id
 exports.getUserById = (req, res) => {
   const collection = db.getCollection('users');
 

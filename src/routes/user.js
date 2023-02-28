@@ -1,6 +1,6 @@
 const express = require('express');
-const db = require('../../mongodb');
-const { getAllUsers, getUserById, registerUser } = require('../../models/user');
+const db = require('../mongodb');
+const { getAllUsers, getUserById,loginUser, registerUser } = require('../models/user');
 const router = express.Router();
 
 router.get('/users', (req, res) => {
@@ -12,9 +12,15 @@ router.get('/user/:id', (req, res) => {
   getUserById(req, res);
 });
 
-router.post('/register', async (req, res) => {
+router.post('/user', (req, res) => {
   registerUser(req, res);
+  loginUser(req, res);
 });
+
+
+
+
+
 
 
 

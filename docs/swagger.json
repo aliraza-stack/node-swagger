@@ -49,7 +49,6 @@
       }
     }
   },
-
   "definitions": {
     "User": {
       "type": "object",

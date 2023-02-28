@@ -1,16 +1,34 @@
 const { getToken, encryptPassword, comparePassword } = require("../util")
 const db = require('../mongodb');
+const jwt = require('jsonwebtoken')
 
 const { AuthenticationError} = require('apollo-server');
 
 const userResolvers = {
     Query: {
-        profile: (parent, args, context, info) => {
-            // console.log(context.user)
-            if (context.loggedIn) {
-                return context.user
-            } else {
-                throw new AuthenticationError("Please Login Again!")
+        users: {
+            resolve: async (parent, args, context, info) => {
+                const users = await db.getCollection('users').find().toArray()
+                return users
+            }
+        },
+        user: {
+            resolve: async (parent, args, context, info) => {
+                const user = await db.getCollection('users').findOne({ _id: args.id })
+                return user
+            }
+        },
+        profile: async (parent, args, context, info) => {
+            const { user } = context;
+            if (!user) {
+            throw new AuthenticationError('You must be logged in to view this information');
+            }
+
+            try {
+            const profile = await User.findById(user.id);
+            return profile;
+            } catch (err) {
+            throw new Error('Error fetching user profile');
             }
         }
     },
@@ -45,16 +63,27 @@ const userResolvers = {
             }
         },
         login: async (parent, args, context, info) => {
-            const user = await db.getCollection('user').findOne({ email: args.email })
+            const user = await db.getCollection('users').findOne({ email: args.email })
             const isMatch = await comparePassword(args.password, user.password)
             if (isMatch) {
                 const token = getToken(user)
                 console.log(token)
+                console.log(user)
                 return { ...user, token };
             } else {
                 throw new AuthenticationError("Wrong Password!")
             }
         },
+        forgotPassword: async (parent, args, context, info) => {
+            const user = await db.getCollection('users').findOne({email: args.email})
+            if (user) {
+                const token = jwt.sign({email: user.email}, 'my-secret-key')
+                return {success: true, token: token}
+            } else {
+                return {success: false, token: null}
+            }
+        }
+
     }
 };
 
